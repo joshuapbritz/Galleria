@@ -1,0 +1,30 @@
+@import 'reset';
+@import 'components/navbar';
+@import 'components/buttons';
+@import 'helpers';
+
+.footer {
+    width: 100%;
+    display: block;
+
+    ul {
+        display: block;
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+        text-align: center;
+
+        li {
+            a {
+                display: inline-block;
+                text-decoration: none;
+                color: #333333;
+                text-align: center;
+
+                &:hover {
+                    color: #dddddd;
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,11 @@
+.container {
+    width: 90%;
+    margin: auto;
+    height: auto;
+
+    &::after {
+        content: '';
+        display: table;
+        clear: both;
+    }
+}

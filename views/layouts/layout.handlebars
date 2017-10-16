@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"> {{#if title}}
+    <title>Gallerya | {{title}}</title>
+    {{else}}
+    <title>Gallerya</title>
+    {{/if}}
+    <link rel="stylesheet" href="/css/main.css">
+</head>
+
+<body>
+    {{>navbar}}
+    {{!All pages are rendered in this tag}}
+    {{{body}}}
+    {{!DO NOT REMOVE}}
+    {{>footer}}
+</body>
+
+</html>

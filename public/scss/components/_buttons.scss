@@ -1,0 +1,73 @@
+.button {
+    display: inline-block;
+    text-decoration: none;
+    width: auto;
+    height: auto;
+    padding: 1em 2em;
+    background-color: #ffffff;
+    border: none;
+    border-radius: 7px;
+    margin: 5px 10px;
+    cursor: pointer;
+    color: #333333;
+    transition: cubic-bezier(0.165, 0.84, 0.44, 1) 200ms;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 100%;
+    user-select: none !important;
+
+    &.tiny {
+        padding: 4px 7px;
+    }
+
+    &.small {
+        padding: 0.5em 1em;
+    }
+
+    &.medium {
+        padding: 1em 2em;
+    }
+
+    &.large {
+        padding: 1.5em 2.5em;
+    }
+
+    &:hover {
+        background-color: #dddddd;
+    }
+
+    @each $name, $color in $themeColors {
+        &.#{$name} {
+            background-color: $color;
+            color: #ffffff;
+            border-color: $color;
+
+            &:hover {
+                background-color: darken($color, 8);
+            }
+        }
+    }
+    overflow: hidden;
+    position: relative;
+    &::after {
+        content: '';
+        display: block;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        background-color: transparentize(#eeeeee, 0.7);
+        transform-origin: center center;
+        border-radius: 50%;
+        transform: scale(0);
+        transition: cubic-bezier(0.165, 0.84, 0.44, 1) 150ms;
+    }
+
+    &:active {
+        &::after {
+            transform: scale(1);
+            border-radius: 0;
+        }
+    }
+}

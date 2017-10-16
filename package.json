@@ -1,0 +1,25 @@
+{
+  "name": "gallerya",
+  "version": "1.0.0",
+  "description": "A gallery api",
+  "main": "index.js",
+  "dependencies": {
+    "express": "^4.16.2",
+    "express-cors": "^0.0.3",
+    "express-handlebars": "^3.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "node index"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/joshuapbritz/Galleria.git"
+  },
+  "author": "Joshua Britz",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/joshuapbritz/Galleria/issues"
+  },
+  "homepage": "https://github.com/joshuapbritz/Galleria#readme"
+}

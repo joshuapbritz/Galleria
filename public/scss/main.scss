@@ -89,3 +89,42 @@
         text-align: center;
     }
 }
+
+.modal {
+    width: 600px;
+    height: 500px;
+    border: solid 2px #dddddd;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin: -250px -300px;
+    background-color: #ffffff;
+    z-index: 200;
+    padding: 20px;
+    overflow-y: auto;
+
+    .image-list {
+        width: 100%;
+        height: 100%;
+
+        .image-list-item {
+            width: calc(50% - 20px);
+            height: auto;
+            margin: 15px 10px;
+            float: left;
+            position: relative;
+
+            &.selected {
+                opacity: 0.5;
+
+                &::after {
+                    content: 'SELECTED';
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                }
+            }
+        }
+    }
+}

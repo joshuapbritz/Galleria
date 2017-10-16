@@ -62,7 +62,21 @@ var loginUser = function(username, password) {
     }
 };
 
+var changePassword = function(username, oldPassword, newPassword) {
+    var item = loginUser(username, oldPassword);
+    if (item) {
+        var details = createUserHash(newPassword);
+        item.password = details.passwordHash;
+        item.salt = details.salt;
+        var updated = db.users.update({ _id: item._id });
+        return updated;
+    } else {
+        return undefined;
+    }
+};
+
 exports.hashPassword = createUserHash;
 exports.createUser = makeUser;
 exports.authorize = getAuth;
 exports.login = loginUser;
+exports.changePassword = changePassword;

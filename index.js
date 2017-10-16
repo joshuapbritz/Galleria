@@ -158,6 +158,8 @@ app.post('/gallery/:id/settings', bd.array(), (req, res) => {
     if (auth.authorize(req.session.Uid)) {
         var gallery = db.galleries.findOne({ _id: req.params.id });
         gallery.settings.numberOfRecords = Number(req.body.numberOfRecords);
+        gallery.name = req.body.galleryName;
+        /*Add More Settings here*/
         db.galleries.update({ _id: gallery._id }, gallery);
         res.redirect('/gallery/' + gallery._id);
     } else {
@@ -225,6 +227,31 @@ app.get('/account', (req, res) => {
         var galleries = db.galleries.find({ userId: user._id }).length;
         user.numberGalleries = galleries;
         res.render('account', { user: user });
+    } else {
+        res.redirect('/login');
+    }
+});
+
+app.get('/account/changepassword', (req, res) => {
+    if (auth.authorize(req.session.Uid)) {
+        res.render('password');
+    } else {
+        res.redirect('/login');
+    }
+});
+
+app.post('/account/changepassword', bd.array(), (req, res) => {
+    if (auth.authorize(req.session.Uid)) {
+        var user = auth.changePassword(
+            req.body.username,
+            req.body.oldPassword,
+            req.body.newPassword
+        );
+        if (user) {
+            res.redirect('/account');
+        } else {
+            res.status(500).send('Something Went Wrong :(');
+        }
     } else {
         res.redirect('/login');
     }

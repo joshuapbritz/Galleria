@@ -1,7 +1,11 @@
 @import 'reset';
+@import 'helpers';
+@import 'components/forms';
 @import 'components/navbar';
 @import 'components/buttons';
-@import 'helpers';
+@import 'components/signup';
+@import 'components/login';
+@import 'components/upload_form';
 
 .footer {
     width: 100%;
@@ -25,6 +29,28 @@
                     color: #dddddd;
                 }
             }
+        }
+    }
+}
+
+.uploading-images {
+    width: 100%;
+    height: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    overflow-x: auto;
+
+    .preview-image {
+        white-space: normal;
+        height: 100%;
+        width: auto;
+        display: inline-block;
+        margin: 0 10px;
+
+        img {
+            height: 200px;
+            width: auto;
+            display: block;
         }
     }
 }

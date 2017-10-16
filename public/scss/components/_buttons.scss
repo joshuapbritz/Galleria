@@ -71,3 +71,56 @@
         }
     }
 }
+
+.floating-button {
+    position: fixed;
+    bottom: 15px;
+    right: 15px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: #ffffff;
+    color: #333333;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:hover {
+        background-color: #dddddd;
+    }
+
+    @each $name, $color in $themeColors {
+        &.#{$name} {
+            background-color: $color;
+            color: #ffffff;
+            border-color: $color;
+
+            &:hover {
+                background-color: darken($color, 8);
+            }
+        }
+    }
+    overflow: hidden;
+    &::after {
+        content: '';
+        display: block;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        background-color: transparentize(#eeeeee, 0.7);
+        transform-origin: center center;
+        border-radius: 50%;
+        transform: scale(0);
+        transition: cubic-bezier(0.165, 0.84, 0.44, 1) 150ms;
+    }
+
+    &:active {
+        &::after {
+            transform: scale(1);
+            border-radius: 0;
+        }
+    }
+}

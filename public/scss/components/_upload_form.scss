@@ -1,0 +1,21 @@
+.upload-form {
+    width: 100%;
+    min-height: 100vh;
+    background-color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .form {
+        width: 500px;
+        height: auto;
+        padding: 20px;
+        border: 2px #dddddd solid;
+        background-color: #ffffff;
+
+        h1 {
+            color: #bdbdbd;
+            text-align: center;
+        }
+    }
+}

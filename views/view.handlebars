@@ -1,0 +1,22 @@
+<div class="wrapper center-text">
+    <h1>{{gallery.name}}</h1>
+</div>
+
+<div class="wrapper">
+    <div class="row">
+        {{#if gallery.filesRelative}} {{#each gallery.filesRelative}}
+        <div class="col-md-4">
+            <img src="/user_images/{{this}}" alt="" srcset="" style="width: 100%; height: auto; display: block">
+            <br>
+        </div>
+        {{/each}} {{else}}
+        <div class="col-xs-12 center-text">
+            <h1>You have no images yet</h1>
+        </div>
+        {{/if}}
+    </div>
+</div>
+
+<a href="/galleries/upload/{{gallery._id}}" class="floating-button primary">
+    <i class="material-icons">file_upload</i>
+</a>

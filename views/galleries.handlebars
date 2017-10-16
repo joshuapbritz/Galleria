@@ -1,7 +1,15 @@
-<div class="container">
-    {{#each galleries}}
-    <h1>{{this.name}}</h1>
-    {{/each}}
+<div class="wrapper">
+    <div class="row">
+        {{#if galleries}} {{#each galleries}}
+        <a href="/gallery/{{this._id}}" class="col-xs-12 col-md-4">
+            <h1>{{this.name}}</h1>
+        </a>
+        {{/each}} {{else}}
+        <div class="col-xs-12 center-text">
+            <h1>You don't have any galleries yet. Make one now.</h1>
+        </div>
+        {{/if}}
+    </div>
 </div>
 
 <a href="/galleries/create" class="floating-button primary">+</a>

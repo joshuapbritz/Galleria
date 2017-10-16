@@ -1,0 +1,17 @@
+<div class="wrapper">
+    <div class="account-info">
+        <div class="info-card">
+            <h1>{{user.username}}</h1>
+            <hr>
+            <h3>Email: {{user.email}}</h3>
+            <h3>Galleries:
+                <b>{{user.numberGalleries}}</b>
+            </h3>
+            <hr>
+            <span>Api Key:</span>
+            <code>{{user._id}}</code>
+            <hr>
+            <a href="/account/changepassword" class="button alert">Change Password</a>
+        </div>
+    </div>
+</div>

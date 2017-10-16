@@ -1,8 +1,17 @@
-<div class="wrapper">
-    <div class="row">
+<div class="wrapper padded">
+    <div class="row galleries">
         {{#if galleries}} {{#each galleries}}
         <a href="/gallery/{{this._id}}" class="col-xs-12 col-md-4">
-            <h1>{{this.name}}</h1>
+            <div class="item">
+                {{#if this.coverRelative}}
+                <div class="image" style="background-image:url('user_images/{{this.coverRelative}}')"></div>
+                {{else}}
+                <div class="image" style="background-image:url('http://via.placeholder.com/500x200?text=No+Images+Yet')"></div>
+                {{/if}}
+                <div class="title center-text">
+                    <h1>{{this.name}}</h1>
+                </div>
+            </div>
         </a>
         {{/each}} {{else}}
         <div class="col-xs-12 center-text">

@@ -45,13 +45,6 @@ var upload = multer({ storage: storage });
 //Set up a static folder for assets [eg. CSS, JS, IMAGES, etc]
 app.use(express.static('public'));
 
-//Allow CORS
-// app.use(
-//     cors({
-//         allowedOrigins: ['*'],
-//     })
-// );
-
 //Bring in authentication
 var auth = require('./auth');
 
@@ -152,15 +145,49 @@ app.get('/gallery/:id', (req, res) => {
     res.render('view', { gallery: gallery });
 });
 
+app.get('/gallery/:id/settings', (req, res) => {
+    if (auth.authorize(req.session.Uid)) {
+        var gallery = db.galleries.findOne({ _id: req.params.id });
+        res.render('settings', { gallery: gallery });
+    } else {
+        res.redirect('/login');
+    }
+});
+
+app.post('/gallery/:id/settings', bd.array(), (req, res) => {
+    if (auth.authorize(req.session.Uid)) {
+        var gallery = db.galleries.findOne({ _id: req.params.id });
+        gallery.settings.numberOfRecords = Number(req.body.numberOfRecords);
+        db.galleries.update({ _id: gallery._id }, gallery);
+        res.redirect('/gallery/' + gallery._id);
+    } else {
+        res.redirect('/login');
+    }
+});
+
+app.get('/gallery/delete/:id', (req, res) => {
+    if (auth.authorize(req.session.Uid)) {
+        var id = req.params.id;
+        db.galleries.remove({ _id: id });
+        res.redirect('/galleries');
+    } else {
+        res.redirect('/login');
+    }
+});
+
 app.post('/create-gallery', bd.array(), (req, res) => {
     if (auth.authorize(req.session.Uid)) {
         var galleryName = req.body.name;
         var gallery = {
             name: galleryName,
+            cover: '',
+            coverRelative: '',
             files: [],
             filesRelative: [],
             userId: req.session.Uid,
-            settings: {},
+            settings: {
+                numberOfRecords: 18,
+            },
         };
 
         db.galleries.save(gallery);
@@ -180,6 +207,11 @@ app.post('/upload-images/:id', upload.single('file'), (req, res) => {
             'http://localhost:4500/user_images/' + req.file.filename
         );
         gallery.filesRelative.push(req.file.filename);
+        if (gallery.cover === '' && gallery.coverRelative === '') {
+            gallery.coverRelative = req.file.filename;
+            gallery.cover =
+                'http://localhost:4500/user_images/' + req.file.filename;
+        }
         db.galleries.update({ _id: id }, gallery);
         res.status(200).send(req.file);
     } else {
@@ -187,16 +219,46 @@ app.post('/upload-images/:id', upload.single('file'), (req, res) => {
     }
 });
 
+app.get('/account', (req, res) => {
+    if (auth.authorize(req.session.Uid)) {
+        var user = db.users.findOne({ _id: req.session.Uid });
+        var galleries = db.galleries.find({ userId: user._id }).length;
+        user.numberGalleries = galleries;
+        res.render('account', { user: user });
+    } else {
+        res.redirect('/login');
+    }
+});
+
+//Routes for API
+var utils = require('./utils');
+app.get('/api/:uid/:name/:page', cors(), (req, res) => {
+    var gallery = db.galleries.findOne({
+        userId: req.params.uid,
+        name: req.params.name,
+    });
+    var records = utils.paginate(
+        gallery.files,
+        req.params.page,
+        gallery.settings.numberOfRecords
+    );
+    records.galleryName = gallery.name;
+    records.cover = gallery.cover;
+
+    res.send(jsonFormat(records, FormatConfig));
+});
+
 app.get('/api/:uid/:name', cors(), (req, res) => {
     var gallery = db.galleries.findOne({
         userId: req.params.uid,
         name: req.params.name,
     });
-    var returnJson = {
+    var records = {
         files: gallery.files,
         galleryName: gallery.name,
+        cover: gallery.cover,
     };
-    res.send(jsonFormat(returnJson, FormatConfig));
+    res.send(jsonFormat(records, FormatConfig));
 });
 
 var port = process.env.PORT || 4500;

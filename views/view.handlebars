@@ -2,11 +2,20 @@
     <h1>{{gallery.name}}</h1>
 </div>
 
+<div class="wrapper center-text padded">
+    <h2>How to access this gallery</h2>
+    <br>
+    <h4>To get the json file for this gallery, simply make a get request to this url</h4>
+    <code>http://localhost:4500/api/{{gallery.userId}}/{{gallery.name}}</code>
+    <h4>If you want pagination, add a page number to the end of you route</h4>
+    <code>http://localhost:4500/api/{{gallery.userId}}/{{gallery.name}}/1</code>
+</div>
+
 <div class="wrapper">
     <div class="row">
         {{#if gallery.filesRelative}} {{#each gallery.filesRelative}}
         <div class="col-md-4">
-            <img src="/user_images/{{this}}" alt="" srcset="" style="width: 100%; height: auto; display: block">
+            <img src="/user_images/{{this}}" alt="image from {{gallery.name}}" srcset="" style="width: 100%; height: auto; display: block">
             <br>
         </div>
         {{/each}} {{else}}
@@ -17,6 +26,16 @@
     </div>
 </div>
 
+<br>
+
+<div class="wrapper padded center-text">
+    <a href="/gallery/delete/{{gallery._id}}" class="button alert">Delete This Gallery</a>
+</div>
+
 <a href="/galleries/upload/{{gallery._id}}" class="floating-button primary">
     <i class="material-icons">file_upload</i>
+</a>
+
+<a href="/gallery/{{gallery._id}}/settings" class="floating-button top info">
+    <i class="material-icons">settings</i>
 </a>

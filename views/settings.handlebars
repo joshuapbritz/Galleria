@@ -1,0 +1,16 @@
+<div class="upload-form">
+    <form action="/gallery/{{gallery._id}}/settings" method="POST" enctype="multipart/form-data" class="form">
+        <div class="control">
+            <h1>Edit settings for <b>{{gallery.name}}</b></h1>
+        </div>
+        <div class="control">
+            <label for="numberOfRecords">Records per Page</label>
+            <input type="number" name="numberOfRecords" value="{{gallery.settings.numberOfRecords}}" min="2" max="100" placeholder="Number of records per page">
+        </div>
+        <div class="control center-text">
+            <button class="button primary small" type="submit">Save</button><br>
+        </div>
+    </form>
+</div>
+
+<a href="/gallery/{{gallery._id}}" class="floating-button top alert"><i class="material-icons">close</i></a>

@@ -15,7 +15,7 @@ var FormatConfig = {
 
 var devEnv = false;
 
-app.use(cors({ allowedOrigins: ['*'] }));
+// app.use(cors({ allowedOrigins: ['*'] }));
 
 db = db.connect('./DB', ['users', 'galleries']);
 

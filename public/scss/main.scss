@@ -88,6 +88,18 @@
         border: solid 1px #dddddd;
         text-align: center;
     }
+    .form {
+        width: 500px;
+        height: auto;
+        padding: 20px;
+        border: 2px #dddddd solid;
+        background-color: #ffffff;
+
+        h1 {
+            color: #bdbdbd;
+            text-align: center;
+        }
+    }
 }
 
 .modal {

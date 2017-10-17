@@ -63,13 +63,24 @@ var loginUser = function(username, password) {
 };
 
 var changePassword = function(username, oldPassword, newPassword) {
-    var item = loginUser(username, oldPassword);
-    if (item) {
-        var details = createUserHash(newPassword);
-        item.password = details.passwordHash;
-        item.salt = details.salt;
-        var updated = db.users.update({ _id: item._id });
-        return updated;
+    var user = db.users.findOne({ username: username });
+    if (user) {
+        var hashPassword = sha512(oldPassword, user.salt);
+        if (hashPassword.passwordHash === user.password) {
+            console.log(user);
+            var newPass = createUserHash(newPassword);
+            user.password = newPass.passwordHash;
+            user.salt = newPass.salt;
+            db.users.update({ _id: user._id }, user);
+            var checked = db.users.findOne({ _id: user._id });
+            if (user.password === checked.password) {
+                return checked;
+            } else {
+                return undefined;
+            }
+        } else {
+            return undefined;
+        }
     } else {
         return undefined;
     }

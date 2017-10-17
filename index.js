@@ -234,7 +234,8 @@ app.get('/account', (req, res) => {
 
 app.get('/account/changepassword', (req, res) => {
     if (auth.authorize(req.session.Uid)) {
-        res.render('password');
+        var user = db.users.findOne({ _id: req.session.Uid });
+        res.render('password', { user: user });
     } else {
         res.redirect('/login');
     }
@@ -244,7 +245,7 @@ app.post('/account/changepassword', bd.array(), (req, res) => {
     if (auth.authorize(req.session.Uid)) {
         var user = auth.changePassword(
             req.body.username,
-            req.body.oldPassword,
+            req.body.password,
             req.body.newPassword
         );
         if (user) {

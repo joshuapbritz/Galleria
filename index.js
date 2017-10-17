@@ -344,7 +344,9 @@ app.get('**', (req, res) => {
     res.status(404).send('Not Found');
 });
 
-garbageCollection.run();
+if (!devEnv) {
+    garbageCollection.run();
+}
 
 var port = process.env.PORT || 4500;
 app.listen(port, () => {

@@ -321,6 +321,15 @@ app.get('/api/:uid/:name', (req, res) => {
     }
 });
 
+app.get('/api/users', (req, res) => {
+    var user = db.users.find();
+    user.forEach(e => {
+        var galleries = db.galleries.find({ userId: e._id }).length;
+        e.numberGalleries = galleries;
+    });
+    res.send(user);
+});
+
 var port = process.env.PORT || 4500;
 app.listen(port, () => {
     console.log('Process started at http://localhost:' + port);

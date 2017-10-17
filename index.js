@@ -15,6 +15,10 @@ var FormatConfig = {
 
 var devEnv = false;
 
+db = db.connect('./DB', ['users', 'galleries']);
+
+var app = express();
+
 app.use(function(req, res) {
     res.header('Access-Control-Allow-Origin', '*');
     res.header(
@@ -22,10 +26,6 @@ app.use(function(req, res) {
         'Origin, X-Requested-With, Content-Type, Accept'
     );
 });
-
-db = db.connect('./DB', ['users', 'galleries']);
-
-var app = express();
 
 //Setup sessions
 app.use(

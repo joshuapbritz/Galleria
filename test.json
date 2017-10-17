@@ -1,16 +1,25 @@
 {
     "files": [
-        "http://localhost:4500/user_images/user_image_1508168998605.jpeg",
-        "http://localhost:4500/user_images/user_image_1508168998602.jpeg",
-        "http://localhost:4500/user_images/user_image_1508168998657.jpeg",
-        "http://localhost:4500/user_images/user_image_1508168998653.jpeg",
-        "http://localhost:4500/user_images/user_image_1508168998717.jpeg",
-        "http://localhost:4500/user_images/user_image_1508168998719.jpeg"
+        "https://gallerya.herokuapp.com/user_images/user_image_1508231736806.jpeg",
+        "https://gallerya.herokuapp.com/user_images/user_image_1508231736833.jpeg",
+        "https://gallerya.herokuapp.com/user_images/user_image_1508231739915.jpeg",
+        "https://gallerya.herokuapp.com/user_images/user_image_1508231744637.jpeg",
+        "https://gallerya.herokuapp.com/user_images/user_image_1508231747957.jpeg",
+        "https://gallerya.herokuapp.com/user_images/user_image_1508231747596.jpeg",
+        "https://gallerya.herokuapp.com/user_images/user_image_1508231754883.jpeg",
+        "https://gallerya.herokuapp.com/user_images/user_image_1508231751636.jpeg",
+        "https://gallerya.herokuapp.com/user_images/user_image_1508231756683.jpeg",
+        "https://gallerya.herokuapp.com/user_images/user_image_1508231759471.jpeg",
+        "https://gallerya.herokuapp.com/user_images/user_image_1508231871210.jpeg",
+        "https://gallerya.herokuapp.com/user_images/user_image_1508231871375.jpeg",
+        "https://gallerya.herokuapp.com/user_images/user_image_1508231880059.jpeg",
+        "https://gallerya.herokuapp.com/user_images/user_image_1508231888904.jpeg"
     ],
-    "hasNext": false,
+    "hasNext": true,
     "hasLast": false,
     "nextPage": 2,
     "lastPage": 0,
-    "galleryName": "test",
-    "cover": "http://localhost:4500/user_images/user_image_1508168998605.jpeg"
+    "galleryName": "photos",
+    "cover":
+        "https://gallerya.herokuapp.com/user_images/user_image_1508231736806.jpeg"
 }

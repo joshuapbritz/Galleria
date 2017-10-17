@@ -280,15 +280,19 @@ app.get('/api/:uid/:name/:page', cors(), (req, res) => {
         userId: req.params.uid,
         name: req.params.name,
     });
-    var records = utils.paginate(
-        gallery.files,
-        req.params.page,
-        gallery.settings.numberOfRecords
-    );
-    records.galleryName = gallery.name;
-    records.cover = gallery.cover;
+    if (gallery) {
+        var records = utils.paginate(
+            gallery.files,
+            req.params.page,
+            gallery.settings.numberOfRecords
+        );
+        records.galleryName = gallery.name;
+        records.cover = gallery.cover;
 
-    res.send(jsonFormat(records, FormatConfig));
+        res.send(jsonFormat(records, FormatConfig));
+    } else {
+        res.status(404).send('Gallery not found');
+    }
 });
 
 app.get('/api/:uid/:name', cors(), (req, res) => {
@@ -296,12 +300,16 @@ app.get('/api/:uid/:name', cors(), (req, res) => {
         userId: req.params.uid,
         name: req.params.name,
     });
-    var records = {
-        files: gallery.files,
-        galleryName: gallery.name,
-        cover: gallery.cover,
-    };
-    res.send(jsonFormat(records, FormatConfig));
+    if (gallery) {
+        var records = {
+            files: gallery.files,
+            galleryName: gallery.name,
+            cover: gallery.cover,
+        };
+        res.send(jsonFormat(records, FormatConfig));
+    } else {
+        res.status(404).send('Gallery not found');
+    }
 });
 
 var port = process.env.PORT || 4500;

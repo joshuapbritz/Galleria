@@ -275,7 +275,7 @@ app.post('/account/changepassword', bd.array(), (req, res) => {
 
 //Routes for API
 var utils = require('./utils');
-app.get('/api/:uid/:name/:page', cors(), (req, res) => {
+app.get('/api/:uid/:name/:page', cors({allowedOrigins: ['*']}), (req, res) => {
     var gallery = db.galleries.findOne({
         userId: req.params.uid,
         name: req.params.name,
@@ -295,7 +295,7 @@ app.get('/api/:uid/:name/:page', cors(), (req, res) => {
     }
 });
 
-app.get('/api/:uid/:name', cors(), (req, res) => {
+app.get('/api/:uid/:name', cors({allowedOrigins: ['*']}), (req, res) => {
     var gallery = db.galleries.findOne({
         userId: req.params.uid,
         name: req.params.name,

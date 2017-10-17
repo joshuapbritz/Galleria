@@ -7,6 +7,7 @@ var db = require('diskdb');
 var expsession = require('express-session');
 var FileStore = require('session-file-store')(expsession);
 var jsonFormat = require('json-format');
+var garbageCollection = require('./garbage');
 
 var FormatConfig = {
     type: 'space',
@@ -186,6 +187,7 @@ app.get('/gallery/delete/:id', (req, res) => {
     if (auth.authorize(req.session.Uid)) {
         var id = req.params.id;
         db.galleries.remove({ _id: id });
+        garbageCollection.runNow();
         res.redirect('/galleries');
     } else {
         res.redirect('/login');
@@ -341,6 +343,8 @@ app.get('/api/users', (req, res) => {
 app.get('**', (req, res) => {
     res.status(404).send('Not Found');
 });
+
+garbageCollection.run();
 
 var port = process.env.PORT || 4500;
 app.listen(port, () => {

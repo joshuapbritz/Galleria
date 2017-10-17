@@ -15,13 +15,13 @@ var FormatConfig = {
 
 var devEnv = false;
 
-// app.use(function(req, res) {
-//     res.header('Access-Control-Allow-Origin', '*');
-//     res.header(
-//         'Access-Control-Allow-Headers',
-//         'Origin, X-Requested-With, Content-Type, Accept'
-//     );
-// });
+app.use(function(req, res) {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header(
+        'Access-Control-Allow-Headers',
+        'Origin, X-Requested-With, Content-Type, Accept'
+    );
+});
 
 db = db.connect('./DB', ['users', 'galleries']);
 

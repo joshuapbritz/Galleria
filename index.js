@@ -13,6 +13,8 @@ var FormatConfig = {
     size: 2,
 };
 
+var devEnv = false;
+
 db = db.connect('./DB', ['users', 'galleries']);
 
 var app = express();
@@ -205,14 +207,27 @@ app.post('/upload-images/:id', upload.single('file'), (req, res) => {
         var id = req.params.id;
         var gallery = db.galleries.findOne({ _id: id });
         console.log(req.file.filename);
-        gallery.files.push(
-            'http://localhost:4500/user_images/' + req.file.filename
-        );
+        if (devEnv) {
+            gallery.files.push(
+                'http://localhost:4500/user_images/' + req.file.filename
+            );
+        } else {
+            gallery.files.push(
+                'https://gallerya.herokuapp.com/user_images/' +
+                    req.file.filename
+            );
+        }
         gallery.filesRelative.push(req.file.filename);
         if (gallery.cover === '' && gallery.coverRelative === '') {
             gallery.coverRelative = req.file.filename;
-            gallery.cover =
-                'http://localhost:4500/user_images/' + req.file.filename;
+            if (devEnv) {
+                gallery.cover =
+                    'http://localhost:4500/user_images/' + req.file.filename;
+            } else {
+                gallery.cover =
+                    'https://gallerya.herokuapp.com/user_images/' +
+                    req.file.filename;
+            }
         }
         db.galleries.update({ _id: id }, gallery);
         res.status(200).send(req.file);

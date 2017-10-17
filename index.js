@@ -323,11 +323,15 @@ app.get('/api/:uid/:name', (req, res) => {
 
 app.get('/api/users', (req, res) => {
     var user = db.users.find();
+    var toReturn = [];
     user.forEach(e => {
+        var returnString = {};
+        returnString.username = e.username;
         var galleries = db.galleries.find({ userId: e._id }).length;
-        e.numberGalleries = galleries;
+        returnString.numberGalleries = galleries;
+        toReturn.push(returnString);
     });
-    res.send(user);
+    res.send(toReturn);
 });
 
 var port = process.env.PORT || 4500;

@@ -152,8 +152,12 @@ app.get('/galleries/upload/:id', (req, res) => {
 });
 
 app.get('/gallery/:id', (req, res) => {
-    var gallery = db.galleries.findOne({ _id: req.params.id });
-    res.render('view', { gallery: gallery });
+    if (auth.authorize(req.session.Uid)) {
+        var gallery = db.galleries.findOne({ _id: req.params.id });
+        res.render('view', { gallery: gallery });
+    } else {
+        res.redirect('/login');
+    }
 });
 
 app.get('/gallery/:id/settings', (req, res) => {

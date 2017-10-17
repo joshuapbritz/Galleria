@@ -228,7 +228,7 @@ app.post('/upload-images/:id', upload.single('file'), (req, res) => {
             );
         } else {
             gallery.files.push(
-                'https://gallerya.herokuapp.com/user_images/' +
+                'https://galleryapi.herokuapp.com/user_images/' +
                     req.file.filename
             );
         }
@@ -240,7 +240,7 @@ app.post('/upload-images/:id', upload.single('file'), (req, res) => {
                     'http://localhost:4500/user_images/' + req.file.filename;
             } else {
                 gallery.cover =
-                    'https://gallerya.herokuapp.com/user_images/' +
+                    'https://galleryapi.herokuapp.com/user_images/' +
                     req.file.filename;
             }
         }

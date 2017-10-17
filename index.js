@@ -334,6 +334,10 @@ app.get('/api/users', (req, res) => {
     res.send(toReturn);
 });
 
+app.get('**', (req, res) => {
+    res.status(404).send('Not Found');
+});
+
 var port = process.env.PORT || 4500;
 app.listen(port, () => {
     console.log('Process started at http://localhost:' + port);

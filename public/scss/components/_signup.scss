@@ -15,7 +15,13 @@
         padding: 20px;
         border: 2px #dddddd solid;
         background-color: #ffffff;
-        
+        transition: cubic-bezier(0.165, 0.84, 0.44, 1) 200ms;
+
+        @media screen and (max-width: 500px) {
+            width: 100%;
+            border: none;
+        }
+
         h1 {
             color: #bdbdbd;
             text-align: center;

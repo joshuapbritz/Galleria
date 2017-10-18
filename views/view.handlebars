@@ -6,16 +6,16 @@
     <h2>How to access this gallery</h2>
     <br>
     <h4>To get the json file for this gallery, simply make a get request to this url</h4>
-    <code>https://galleryapi.herokuapp.com/api/{{gallery.userId}}/{{gallery.name}}</code>
+    <code>{{base}}api/{{gallery.userId}}/{{gallery.name}}</code>
     <h4>If you want pagination, add a page number to the end of you route</h4>
-    <code>https://galleryapi.herokuapp.com/api/{{gallery.userId}}/{{gallery.name}}/1</code>
+    <code>{{base}}api/{{gallery.userId}}/{{gallery.name}}/1</code>
 </div>
 
 <div class="wrapper">
     <div class="row">
         {{#if gallery.filesRelative}} {{#each gallery.filesRelative}}
         <div class="col-md-4">
-            <img src="/user_images/{{this}}" alt="image from {{gallery.name}}" srcset="" style="width: 100%; height: auto; display: block">
+            <img src="{{this}}" alt="image from {{gallery.name}}" srcset="" style="width: 100%; height: auto; display: block">
             <br>
         </div>
         {{/each}} {{else}}

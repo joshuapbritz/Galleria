@@ -13,11 +13,12 @@ var doCheck = function() {
 
     // All user galleries;
     var data = db.galleries.find();
-    var galleryImages = [];
+    var galleryImages = ['.ignore'];
 
     // Flatten the hierarchy of the images
     data.forEach(el => {
         el.filesRelative.forEach(item => {
+            item = item.replace('/user_images/', '');
             galleryImages.push(item);
         });
     });
@@ -50,8 +51,9 @@ var doCheck = function() {
     );
 };
 
-var gc = function() {
-    setInterval(doCheck, 1800000);
+var gc = function(time) {
+    console.log('Started');
+    setInterval(doCheck, time);
 };
 
 exports.run = gc;

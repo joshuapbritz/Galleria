@@ -8,13 +8,9 @@ var expsession = require('express-session');
 var FileStore = require('session-file-store')(expsession);
 var jsonFormat = require('json-format');
 var garbageCollection = require('./garbage');
+var conf = require('./config');
 
-var FormatConfig = {
-    type: 'space',
-    size: 2,
-};
-
-var devEnv = false;
+var devEnv = conf.devEnv;
 
 db = db.connect('./DB', ['users', 'galleries']);
 
@@ -44,15 +40,7 @@ app.use(
 app.engine('handlebars', exphbs({ defaultLayout: 'layout' }));
 app.set('view engine', 'handlebars');
 
-var storage = multer.diskStorage({
-    destination: function(req, file, cb) {
-        cb(null, './public/user_images');
-    },
-    filename: function(req, file, cb) {
-        cb(null, 'user_image_' + Date.now() + '.jpeg');
-    },
-});
-var upload = multer({ storage: storage });
+var upload = multer({ storage: conf.diskStorage });
 
 //Set up a static folder for assets [eg. CSS, JS, IMAGES, etc]
 app.use(express.static('public'));
@@ -155,7 +143,7 @@ app.get('/galleries/upload/:id', (req, res) => {
 app.get('/gallery/:id', (req, res) => {
     if (auth.authorize(req.session.Uid)) {
         var gallery = db.galleries.findOne({ _id: req.params.id });
-        res.render('view', { gallery: gallery });
+        res.render('view', { gallery: gallery, base: conf.baseUrl });
     } else {
         res.redirect('/login');
     }
@@ -219,32 +207,28 @@ app.post('/create-gallery', bd.array(), (req, res) => {
 
 app.post('/upload-images/:id', upload.single('file'), (req, res) => {
     if (auth.authorize(req.session.Uid)) {
+        // Get the ID of the gallery fromthe route params
         var id = req.params.id;
+
+        // Fin the gallery in the DB
         var gallery = db.galleries.findOne({ _id: id });
-        console.log(req.file.filename);
-        if (devEnv) {
-            gallery.files.push(
-                'http://localhost:4500/user_images/' + req.file.filename
-            );
-        } else {
-            gallery.files.push(
-                'https://galleryapi.herokuapp.com/user_images/' +
-                    req.file.filename
-            );
-        }
-        gallery.filesRelative.push(req.file.filename);
+
+        // Add the absolute url of the image to the DB
+        gallery.files.push(conf.exportUrl + req.file.filename);
+
+        // Add the relative url of the image to the DB
+        gallery.filesRelative.push(conf.relativeBase + req.file.filename);
+
+        // If the gallery doesn't have a cover yet, create one
         if (gallery.cover === '' && gallery.coverRelative === '') {
-            gallery.coverRelative = req.file.filename;
-            if (devEnv) {
-                gallery.cover =
-                    'http://localhost:4500/user_images/' + req.file.filename;
-            } else {
-                gallery.cover =
-                    'https://galleryapi.herokuapp.com/user_images/' +
-                    req.file.filename;
-            }
+            gallery.coverRelative = conf.relativeBase + req.file.filename;
+            gallery.cover = conf.exportUrl + req.file.filename;
         }
+
+        // Update the DB
         db.galleries.update({ _id: id }, gallery);
+
+        // Return successful
         res.status(200).send(req.file);
     } else {
         res.redirect('/login');
@@ -304,7 +288,7 @@ app.get('/api/:uid/:name/:page', (req, res) => {
         records.galleryName = gallery.name;
         records.cover = gallery.cover;
 
-        res.send(jsonFormat(records, FormatConfig));
+        res.send(jsonFormat(records, conf.FormatConfig));
     } else {
         res.status(404).send('Gallery not found');
     }
@@ -321,7 +305,7 @@ app.get('/api/:uid/:name', (req, res) => {
             galleryName: gallery.name,
             cover: gallery.cover,
         };
-        res.send(jsonFormat(records, FormatConfig));
+        res.send(jsonFormat(records, conf.FormatConfig));
     } else {
         res.status(404).send('Gallery not found');
     }
@@ -345,7 +329,9 @@ app.get('**', (req, res) => {
 });
 
 if (!devEnv) {
-    garbageCollection.run();
+    garbageCollection.run(1800000);
+}else {
+    garbageCollection.run(30000);
 }
 
 var port = process.env.PORT || 4500;

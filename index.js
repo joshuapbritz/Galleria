@@ -210,14 +210,37 @@ app.post('/upload-images/:id', upload.single('file'), (req, res) => {
 
 app.get('/delete-image/:id/:index', (req, res) => {
     if (auth.authorize(req.session.Uid)) {
-        var gallery = db.galleries.findOne({ _id: req.params.id });
-        console.log(gallery.files.length);
-        var index = req.params.index;
-        gallery.files.splice(index, 1);
-        gallery.filesRelative.splice(index, 1);
-        console.log(gallery.files.length);
-        db.galleries.update({ _id: gallery._id }, gallery);
-        res.redirect('/gallery/' + req.params.id);
+        // Find the gallery
+        var gallery = db.galleries.findOne({
+            _id: req.params.id,
+            userId: req.session.Uid,
+        });
+        if (gallery) {
+            // Get the index of the file to delete
+            var index = req.params.index;
+
+            // Check if the cover image needs to be updated
+            var changeCover = false;
+            if (gallery.files[index] === gallery.cover) {
+                changeCover = true;
+            }
+
+            // Remove the image
+            gallery.files.splice(index, 1);
+            gallery.filesRelative.splice(index, 1);
+
+            // If the cover needed to be updated, update it
+            if (changeCover) {
+                gallery.cover = gallery.files[0];
+                gallery.coverRelative = gallery.filesRelative[0];
+            }
+            
+            // Update the DB
+            db.galleries.update({ _id: gallery._id }, gallery);
+
+            // Return
+            res.redirect('/gallery/' + req.params.id);
+        }
     } else {
         res.redirect('/login');
     }

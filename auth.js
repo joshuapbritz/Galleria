@@ -53,7 +53,9 @@ var makeUser = function(user) {
 };
 
 var loginUser = function(username, password) {
-    var user = db.users.findOne({ username: username });
+    var user =
+        db.users.findOne({ username: username }) ||
+        db.users.findOne({ email: username });
     var hashPassword = sha512(password, user.salt);
     if (user.password === hashPassword.passwordHash) {
         return user;

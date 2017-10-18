@@ -6,7 +6,7 @@ var JsonFormatConfig = {
 };
 
 var GetDevEnv = function() {
-    return false;
+    return true;
 };
 
 var getUrl = function() {

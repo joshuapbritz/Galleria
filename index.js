@@ -34,7 +34,7 @@ app.use(
         secret: 'Ice Cream Is Happiness',
         resave: true,
         saveUninitialized: false,
-        cookie: { maxAge: 300000 },
+        cookie: { maxAge: 1800000 },
         store: new FileStore(),
     })
 );

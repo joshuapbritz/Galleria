@@ -1,5 +1,5 @@
 {
-  "name": "gallerya",
+  "name": "galleryapi",
   "version": "1.0.0",
   "description": "A gallery api",
   "main": "index.js",
@@ -18,7 +18,7 @@
   "devDependencies": {},
   "scripts": {
     "start": "node index",
-    "test": "jasmine"
+    "test": "jasmine spec/mainSpec.js"
   },
   "repository": {
     "type": "git",

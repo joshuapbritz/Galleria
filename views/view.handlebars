@@ -14,9 +14,12 @@
 <div class="wrapper">
     <div class="row">
         {{#if gallery.filesRelative}} {{#each gallery.filesRelative}}
-        <div class="col-md-4">
+        <div class="col-md-4 view-image">
             <img src="{{this}}" alt="image from {{gallery.name}}" srcset="" style="width: 100%; height: auto; display: block">
-            <br>
+            <div class="action">
+                <a href="/delete-image/{{../gallery._id}}/{{@index}}" class="button tiny alert">Delete Image</a>
+                <a href="{{this}}" target="_blank" class="button tiny info">View</a>
+            </div>
         </div>
         {{/each}} {{else}}
         <div class="col-xs-12 center-text">

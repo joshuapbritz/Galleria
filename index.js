@@ -208,6 +208,21 @@ app.post('/upload-images/:id', upload.single('file'), (req, res) => {
     }
 });
 
+app.get('/delete-image/:id/:index', (req, res) => {
+    if (auth.authorize(req.session.Uid)) {
+        var gallery = db.galleries.findOne({ _id: req.params.id });
+        console.log(gallery.files.length);
+        var index = req.params.index;
+        gallery.files.splice(index, 1);
+        gallery.filesRelative.splice(index, 1);
+        console.log(gallery.files.length);
+        db.galleries.update({ _id: gallery._id }, gallery);
+        res.redirect('/gallery/' + req.params.id);
+    } else {
+        res.redirect('/login');
+    }
+});
+
 // [GET] View a gallery
 app.get('/gallery/:id', (req, res) => {
     if (auth.authorize(req.session.Uid)) {

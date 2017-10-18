@@ -146,3 +146,47 @@
         }
     }
 }
+
+.err_page {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-image: url('../images/404_image.jpg');
+    background-size: cover;
+    background-position: left top;
+
+    @media screen and (max-width: 650px) {
+        background-position: right center;
+        min-height: 50vh;
+    }
+}
+
+.card {
+    width: 400px;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: rgba(255, 255, 255, 0.9);
+    text-align: center;
+
+    @media screen and (max-width: 650px) {
+        height: auto;
+        position: static;
+        padding: 15px;
+        width: 100%;
+    }
+
+    h1 {
+        font-weight: 300;
+        font-size: 8rem;
+        color: #aaa;
+        text-align: center;
+    }
+
+    .wrapper {
+        padding: 20px 0;
+    }
+}

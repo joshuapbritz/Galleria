@@ -10,12 +10,14 @@ var jsonFormat = require('json-format');
 var garbageCollection = require('./garbage');
 var conf = require('./config');
 
+// Get enviroment from config
 var devEnv = conf.devEnv;
 
 db = db.connect('./DB', ['users', 'galleries']);
 
 var app = express();
 
+// Allow CORS
 app.use(function(req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
     res.header(
@@ -48,7 +50,7 @@ app.use(express.static('public'));
 //Bring in authentication
 var auth = require('./auth');
 
-//Routes
+//-- Routes
 app.get('/', function(req, res) {
     if (auth.authorize(req.session.Uid)) {
         var user = db.users.findOne({ _id: req.session.Uid });
@@ -61,10 +63,12 @@ app.get('/', function(req, res) {
     }
 });
 
+// [GET] Route for making an account
 app.get('/signup', function(req, res) {
     res.render('signup', { layout: 'account' });
 });
 
+// [POST] Route for making an account
 app.post('/signup', bd.array(), function(req, res) {
     var hashedPassword = auth.hashPassword(req.body.password);
     var details = {
@@ -83,10 +87,12 @@ app.post('/signup', bd.array(), function(req, res) {
     }
 });
 
+// [GET] Route for logging in
 app.get('/login', (req, res) => {
     res.render('login', { layout: 'account' });
 });
 
+// [POST] Route for logging in
 app.post('/login', bd.array(), function(req, res) {
     var userDetails = auth.login(req.body.username, req.body.password);
     if (userDetails) {
@@ -97,6 +103,7 @@ app.post('/login', bd.array(), function(req, res) {
     }
 });
 
+// [GET] Route for logging out
 app.get('/logout', (req, res) => {
     if (req.session) {
         req.session.destroy(err => {
@@ -111,6 +118,9 @@ app.get('/logout', (req, res) => {
     }
 });
 
+//-- Authorized Routes
+
+// [GET] Load user galleries
 app.get('/galleries', (req, res) => {
     if (auth.authorize(req.session.Uid)) {
         var galleries = db.galleries.find({ userId: req.session.Uid });
@@ -123,6 +133,7 @@ app.get('/galleries', (req, res) => {
     }
 });
 
+// [GET] Create a gallery
 app.get('/galleries/create', (req, res) => {
     if (auth.authorize(req.session.Uid)) {
         res.render('create');
@@ -131,57 +142,7 @@ app.get('/galleries/create', (req, res) => {
     }
 });
 
-app.get('/galleries/upload/:id', (req, res) => {
-    if (auth.authorize(req.session.Uid)) {
-        var id = req.params.id;
-        res.render('upload', { galleryId: id });
-    } else {
-        res.redirect('/login');
-    }
-});
-
-app.get('/gallery/:id', (req, res) => {
-    if (auth.authorize(req.session.Uid)) {
-        var gallery = db.galleries.findOne({ _id: req.params.id });
-        res.render('view', { gallery: gallery, base: conf.baseUrl });
-    } else {
-        res.redirect('/login');
-    }
-});
-
-app.get('/gallery/:id/settings', (req, res) => {
-    if (auth.authorize(req.session.Uid)) {
-        var gallery = db.galleries.findOne({ _id: req.params.id });
-        res.render('settings', { gallery: gallery });
-    } else {
-        res.redirect('/login');
-    }
-});
-
-app.post('/gallery/:id/settings', bd.array(), (req, res) => {
-    if (auth.authorize(req.session.Uid)) {
-        var gallery = db.galleries.findOne({ _id: req.params.id });
-        gallery.settings.numberOfRecords = Number(req.body.numberOfRecords);
-        gallery.name = req.body.galleryName;
-        /*Add More Settings here*/
-        db.galleries.update({ _id: gallery._id }, gallery);
-        res.redirect('/gallery/' + gallery._id);
-    } else {
-        res.redirect('/login');
-    }
-});
-
-app.get('/gallery/delete/:id', (req, res) => {
-    if (auth.authorize(req.session.Uid)) {
-        var id = req.params.id;
-        db.galleries.remove({ _id: id });
-        garbageCollection.runNow();
-        res.redirect('/galleries');
-    } else {
-        res.redirect('/login');
-    }
-});
-
+// [POST] Create a gallery
 app.post('/create-gallery', bd.array(), (req, res) => {
     if (auth.authorize(req.session.Uid)) {
         var galleryName = req.body.name;
@@ -205,6 +166,17 @@ app.post('/create-gallery', bd.array(), (req, res) => {
     }
 });
 
+// [GET] Upload images to a gallery
+app.get('/galleries/upload/:id', (req, res) => {
+    if (auth.authorize(req.session.Uid)) {
+        var id = req.params.id;
+        res.render('upload', { galleryId: id });
+    } else {
+        res.redirect('/login');
+    }
+});
+
+// [POST] Upload images to a gallery
 app.post('/upload-images/:id', upload.single('file'), (req, res) => {
     if (auth.authorize(req.session.Uid)) {
         // Get the ID of the gallery fromthe route params
@@ -235,6 +207,53 @@ app.post('/upload-images/:id', upload.single('file'), (req, res) => {
     }
 });
 
+// [GET] View a gallery
+app.get('/gallery/:id', (req, res) => {
+    if (auth.authorize(req.session.Uid)) {
+        var gallery = db.galleries.findOne({ _id: req.params.id });
+        res.render('view', { gallery: gallery, base: conf.baseUrl });
+    } else {
+        res.redirect('/login');
+    }
+});
+
+// [GET] Change a galleries settings
+app.get('/gallery/:id/settings', (req, res) => {
+    if (auth.authorize(req.session.Uid)) {
+        var gallery = db.galleries.findOne({ _id: req.params.id });
+        res.render('settings', { gallery: gallery });
+    } else {
+        res.redirect('/login');
+    }
+});
+
+// [POST] Change a galleries settings
+app.post('/gallery/:id/settings', bd.array(), (req, res) => {
+    if (auth.authorize(req.session.Uid)) {
+        var gallery = db.galleries.findOne({ _id: req.params.id });
+        gallery.settings.numberOfRecords = Number(req.body.numberOfRecords);
+        gallery.name = req.body.galleryName;
+        /*Add More Settings here*/
+        db.galleries.update({ _id: gallery._id }, gallery);
+        res.redirect('/gallery/' + gallery._id);
+    } else {
+        res.redirect('/login');
+    }
+});
+
+// [GET] Delete a gallery
+app.get('/gallery/delete/:id', (req, res) => {
+    if (auth.authorize(req.session.Uid)) {
+        var id = req.params.id;
+        db.galleries.remove({ _id: id });
+        garbageCollection.runNow();
+        res.redirect('/galleries');
+    } else {
+        res.redirect('/login');
+    }
+});
+
+// [GET] View account
 app.get('/account', (req, res) => {
     if (auth.authorize(req.session.Uid)) {
         var user = db.users.findOne({ _id: req.session.Uid });
@@ -246,6 +265,7 @@ app.get('/account', (req, res) => {
     }
 });
 
+// [GET] Change user password
 app.get('/account/changepassword', (req, res) => {
     if (auth.authorize(req.session.Uid)) {
         var user = db.users.findOne({ _id: req.session.Uid });
@@ -255,6 +275,7 @@ app.get('/account/changepassword', (req, res) => {
     }
 });
 
+// [POST] Change user password
 app.post('/account/changepassword', bd.array(), (req, res) => {
     if (auth.authorize(req.session.Uid)) {
         var user = auth.changePassword(
@@ -272,8 +293,12 @@ app.post('/account/changepassword', bd.array(), (req, res) => {
     }
 });
 
-//Routes for API
+//-- Routes for API
+
+// Get pagination utilities
 var utils = require('./utils');
+
+// [GET] Return image urls in a JSON file with pagination activated
 app.get('/api/:uid/:name/:page', (req, res) => {
     var gallery = db.galleries.findOne({
         userId: req.params.uid,
@@ -294,6 +319,7 @@ app.get('/api/:uid/:name/:page', (req, res) => {
     }
 });
 
+// [GET] Return image urls in a JSON file with no pagination
 app.get('/api/:uid/:name', (req, res) => {
     var gallery = db.galleries.findOne({
         userId: req.params.uid,
@@ -311,6 +337,7 @@ app.get('/api/:uid/:name', (req, res) => {
     }
 });
 
+// [GET] See all registered users
 app.get('/api/users', (req, res) => {
     var user = db.users.find();
     var toReturn = [];
@@ -324,13 +351,29 @@ app.get('/api/users', (req, res) => {
     res.send(toReturn);
 });
 
+// [GET] 404 route
 app.get('**', (req, res) => {
-    res.status(404).send('Not Found');
+    res
+        .status(404)
+        .render('error', { layout: 'account', route: req.originalUrl });
+});
+
+// [POST] 404 route
+app.post('**', (req, res) => {
+    res
+        .status(404)
+        .send(
+            'Route ' +
+                req.originalUrl +
+                " doesn't exsist. See [" +
+                conf.baseUrl +
+                '] for more info about api routes'
+        );
 });
 
 if (!devEnv) {
     garbageCollection.run(1800000);
-}else {
+} else {
     garbageCollection.run(30000);
 }
 

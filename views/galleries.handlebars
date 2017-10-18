@@ -8,10 +8,9 @@
                 {{else}}
                 <div class="image" style="background-image:url('http://via.placeholder.com/500x200?text=No+Images+Yet')"></div>
                 {{/if}}
-                <div class="title center-text">
-                    <h1>{{this.name}}
-                        <small>{{this.files.length}}</small>
-                    </h1>
+                <div class="title center-text" style="padding: 15px 0;">
+                    <h1>{{this.name}}</h1>
+                    <span><small>({{this.files.length}} images)</small></span>
                 </div>
             </div>
         </a>

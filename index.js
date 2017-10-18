@@ -9,7 +9,7 @@ var FileStore = require('session-file-store')(expsession);
 var jsonFormat = require('json-format');
 var garbageCollection = require('./garbage');
 var conf = require('./config');
-var nodemailer = require('nodemailer');
+var emailer = require('./emailer');
 
 // Get enviroment from config
 var devEnv = conf.devEnv;

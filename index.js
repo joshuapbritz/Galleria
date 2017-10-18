@@ -159,9 +159,9 @@ app.post('/create-gallery', bd.array(), (req, res) => {
             },
         };
 
-        db.galleries.save(gallery);
+        var galleryData = db.galleries.save(gallery);
 
-        res.redirect('/galleries');
+        res.redirect('/galleries/upload/' + galleryData._id);
     } else {
         res.redirect('/login');
     }
@@ -234,7 +234,7 @@ app.get('/delete-image/:id/:index', (req, res) => {
                 gallery.cover = gallery.files[0];
                 gallery.coverRelative = gallery.filesRelative[0];
             }
-            
+
             // Update the DB
             db.galleries.update({ _id: gallery._id }, gallery);
 

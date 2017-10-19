@@ -9,7 +9,7 @@ var expsession = require('express-session');
 var FileStore = require('session-file-store')(expsession);
 var garbageCollection = require('./garbage');
 var conf = require('./config');
-var emailer = require('./emailer');
+// var emailer = require('./emailer');
 
 // Get enviroment from config
 var devEnv = conf.devEnv;
